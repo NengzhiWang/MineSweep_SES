@@ -170,18 +170,9 @@ class Mine_Map:
         # print all data of gird
         for x in range(SIZE_X):
             for y in range(SIZE_Y):
-                M = self.Mine_Map[x][y]
                 D = self.Data_Map[x][y]
+                print(D, end=' ')
 
-                if M == 1:
-                    Out = '■'
-                else:
-                    if D == '0':
-                        Out = '□'
-                    else:
-                        Out = D
-
-                print(Out, end=' ')
             print(' ')
         print('\n')
 
