@@ -7,6 +7,13 @@ SIZE_Y = 10
 # number of mines
 MINE_NUM = 10
 
+# State
+Unknown_Grid = '□'
+Flagged_Grid = 'F'
+Unflagg_Mine = '*'
+UnMined_Flag = 'X'
+Flagged_Mine = '√'
+
 # image paths
 # image_1 = './Image/tile_1.png'
 # image_2 = './Image/tile_2.png'

@@ -1,4 +1,4 @@
-from config import SIZE_X, SIZE_Y, MINE_NUM
+from config import *
 import random
 
 
@@ -30,7 +30,7 @@ class Mine_Map:
     Flag_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
 
     Data_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
-    Show_Map = [['X' for i in range(SIZE_X)] for i in range(SIZE_Y)]
+    Show_Map = [[Unknown_Grid for i in range(SIZE_X)] for i in range(SIZE_Y)]
     Status = '0'
 
     # init the map with the first click at grid (x,y)
@@ -72,7 +72,7 @@ class Mine_Map:
     def Click(self, x, y):
         # can only click a unknown grid
         print('click at grid(%d,%d)' % (x, y))
-        if self.Show_Map[x][y] == 'X':
+        if self.Show_Map[x][y] == Unknown_Grid:
             # click a mine, dead !
             if self.Data_Map[x][y] == 'M':
                 self.Status == '3'
@@ -93,7 +93,7 @@ class Mine_Map:
         if self.Data_Map[x][y] == 'M':
             return
         # find shown grid
-        if self.Show_Map[x][y] != 'X':
+        if self.Show_Map[x][y] != Unknown_Grid:
             return
 
         else:
@@ -116,22 +116,21 @@ class Mine_Map:
 
     def Flag(self, x, y):
         # upgrade the show map with flags
-        print(self.Show_Map[x][y])
         S = self.Show_Map[x][y]
         # can only flag an unknown grid or disflag a flagged grid
-        if S != 'F' and S != 'X':
+        if S != Flagged_Grid and S != Unknown_Grid:
             return
         else:
             print('flag at grid(%d,%d)' % (x, y))
             if self.Flag_Map[x][y] == 0:
                 # flag
                 self.Flag_Map[x][y] = 1
-                self.Show_Map[x][y] = 'F'
+                self.Show_Map[x][y] = Flagged_Grid
 
             elif self.Flag_Map[x][y] == 1:
                 # disflag
                 self.Flag_Map[x][y] = 0
-                self.Show_Map[x][y] = 'X'
+                self.Show_Map[x][y] = Unknown_Grid
 
             if self.Flag_Map == self.Mine_Map:
                 # Flagged all mines, you win !
@@ -151,13 +150,13 @@ class Mine_Map:
                     self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
                 elif isFlag == 1 and isMine == 0:
                     # have flag, no mine
-                    self.Show_Map[x_i][y_i] = 'W'
+                    self.Show_Map[x_i][y_i] = UnMined_Flag
                 elif isFlag == 0 and isMine == 1:
                     # no flag, have mine
-                    self.Show_Map[x_i][y_i] = 'D'
+                    self.Show_Map[x_i][y_i] = Unflagg_Mine
                 elif isFlag == 1 and isMine == 1:
                     # have flag, have mine
-                    self.Show_Map[x_i][y_i] = 'M'
+                    self.Show_Map[x_i][y_i] = Flagged_Mine
 
     def Win_Show(self):
         self.Status = '2'
@@ -166,7 +165,7 @@ class Mine_Map:
                 isFlag = self.Flag_Map[x_i][y_i]
                 if isFlag == 1:
                     # have flag and mine
-                    self.Show_Map[x_i][y_i] = 'M'
+                    self.Show_Map[x_i][y_i] = Flagged_Mine
                 else:
                     # no flag and mine
                     self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
@@ -194,32 +193,8 @@ class Mine_Map:
         for x in range(SIZE_X):
             for y in range(SIZE_Y):
                 D = self.Show_Map[x][y]
-                if self.Status == '1':
-                    if D == 'X':
-                        Out = '■'
-                    elif D == '0':
-                        Out = '□'
-                    elif D == 'F':
-                        Out = '.'
-                    else:
-                        Out = D
-                elif self.Status == '2':
-                    if D == 'M':
-                        Out = '√'
-                    else:
-                        D = Out
-                elif self.Status == '3':
-                    if D == 'D':
-                        Out = 'X'
-                    elif D == 'M':
-                        Out = '√'
-                    elif D == 'W':
-                        Out = '■'
-                    else:
-                        Out = D
+                print(D, end=' ')
 
-                print(Out, end=' ')
-                # print(D, end=' ')
             print(' ')
         print('\n')
 
@@ -235,3 +210,4 @@ class Mine_Map:
             x = mine[0]
             y = mine[1]
             print('Mine at (%d,%d)' % (x, y))
+
