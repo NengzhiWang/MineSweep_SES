@@ -6,20 +6,16 @@ class Mine_Map:
     # Mine_Map: location of mines
     #   1 for mine
     #   0 for empty
+
     # Flag_Map: location of flags
     #   1 for flag
     #   0 for empty
+
     # Data_Map: data in each grid
     #   'M' for mine
     #   str(int) for number of mines nearby
     # Show_Map: figure shown in GUI
-    #   'X' for unknown
-    #   'str(int)' for number of mines nearby
-    #   'F' for a flag
-    #   'D' for a unflagged mine
-    #   'M' for a flagged mine
-    #   'W' for a wrong flag
-    #
+
     # Status:
     #   '0' not init
     #   '1' playing
@@ -210,4 +206,3 @@ class Mine_Map:
             x = mine[0]
             y = mine[1]
             print('Mine at (%d,%d)' % (x, y))
-
