@@ -97,7 +97,7 @@ class Mine_Map:
                 # mine nearby, only upgrade this grid, no recursive
                 self.Show_Map[x][y] = self.Data_Map[x][y]
             elif self.Data_Map[x][y] == '0':
-                # no mine nearby, upgrade this grid and 8 nearbu grids
+                # no mine nearby, upgrade this grid and 8 nearby grids
                 self.Show_Map[x][y] = self.Data_Map[x][y]
                 # 4 nearby
                 self.Show_Upgrade(x - 1, y)
