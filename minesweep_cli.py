@@ -1,4 +1,4 @@
-from config import SIZE_X, SIZE_Y
+from config import SIZE_X, SIZE_Y, alive, die, not_init, win
 from Mine_Sweep import Mine_Map
 
 if __name__ == "__main__":
@@ -27,5 +27,5 @@ if __name__ == "__main__":
 
         Mine.Disp_UI()
         Steps += 1
-        if Mine.Status != '1':
+        if Mine.Status != alive:
             Continue_Game = False

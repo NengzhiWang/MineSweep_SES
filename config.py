@@ -7,12 +7,18 @@ SIZE_Y = 10
 # number of mines
 MINE_NUM = 10
 
-# State
+# Show List
 Unknown_Grid = '□'
 Flagged_Grid = 'F'
 Unflagg_Mine = '*'
 UnMined_Flag = 'X'
 Flagged_Mine = '√'
+
+# Status
+not_init = 'a'
+alive = 'b'
+win = 'c'
+die = 'd'
 
 # image paths
 # image_1 = './Image/tile_1.png'

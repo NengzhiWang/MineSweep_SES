@@ -1,4 +1,6 @@
-from config import *
+from config import SIZE_X, SIZE_Y, MINE_NUM, Unknown_Grid, Flagged_Grid
+from config import Flagged_Mine, Unflagg_Mine, UnMined_Flag
+from config import not_init, alive, win, die
 import random
 
 
@@ -24,14 +26,15 @@ class Mine_Map:
 
     Mine_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
     Flag_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
-
     Data_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
     Show_Map = [[Unknown_Grid for i in range(SIZE_X)] for i in range(SIZE_Y)]
-    Status = '0'
+
+    Status = not_init
 
     # init the map with the first click at grid (x,y)
     def __init__(self, x, y):
-        self.Status = '1'
+        print('init at grid (%d,%d)' % (x, y))
+        self.Status = alive
 
         init_pos = x * SIZE_X + y
         Mine_List = []
@@ -66,17 +69,18 @@ class Mine_Map:
         self.Click(x, y)
 
     def Click(self, x, y):
-        # can only click a unknown grid
-        print('click at grid(%d,%d)' % (x, y))
-        if self.Show_Map[x][y] == Unknown_Grid:
-            # click a mine, dead !
-            if self.Data_Map[x][y] == 'M':
-                self.Status == '3'
-                print('died')
-                self.Died_Show()
-            else:
-                # expand the displayed range recursively
-                self.Show_Upgrade(x, y)
+        if self.Status == alive:
+            # can only click a unknown grid
+            print('click at grid(%d,%d)' % (x, y))
+            if self.Show_Map[x][y] == Unknown_Grid:
+                # click a mine, dead !
+                if self.Data_Map[x][y] == 'M':
+                    self.Status = die
+                    print('died')
+                    self.Died_Show()
+                else:
+                    # expand the displayed range recursively
+                    self.Show_Upgrade(x, y)
 
     def Show_Upgrade(self, x, y):
         # recursive termination
@@ -111,60 +115,61 @@ class Mine_Map:
                 self.Show_Upgrade(x, y - 1)
 
     def Flag(self, x, y):
-        # upgrade the show map with flags
-        S = self.Show_Map[x][y]
-        # can only flag an unknown grid or disflag a flagged grid
-        if S != Flagged_Grid and S != Unknown_Grid:
-            return
-        else:
-            print('flag at grid(%d,%d)' % (x, y))
-            if self.Flag_Map[x][y] == 0:
-                # flag
-                self.Flag_Map[x][y] = 1
-                self.Show_Map[x][y] = Flagged_Grid
+        if self.Status == alive:
+            # upgrade the show map with flags
+            S = self.Show_Map[x][y]
+            # can only flag an unknown grid or disflag a flagged grid
+            if S != Flagged_Grid and S != Unknown_Grid:
+                return
+            else:
+                print('flag at grid(%d,%d)' % (x, y))
+                if self.Flag_Map[x][y] == 0:
+                    # flag
+                    self.Flag_Map[x][y] = 1
+                    self.Show_Map[x][y] = Flagged_Grid
 
-            elif self.Flag_Map[x][y] == 1:
-                # disflag
-                self.Flag_Map[x][y] = 0
-                self.Show_Map[x][y] = Unknown_Grid
+                elif self.Flag_Map[x][y] == 1:
+                    # disflag
+                    self.Flag_Map[x][y] = 0
+                    self.Show_Map[x][y] = Unknown_Grid
 
-            if self.Flag_Map == self.Mine_Map:
-                # Flagged all mines, you win !
-                self.Status = '2'
-                print('win')
-                self.Win_Show()
+                if self.Flag_Map == self.Mine_Map:
+                    # Flagged all mines, you win !
+                    self.Status = win
+                    print('win')
+                    self.Win_Show()
 
     def Died_Show(self):
         # died, upgrade the Show_Map
-        self.Status = '3'
-        for x_i in range(SIZE_X):
-            for y_i in range(SIZE_Y):
-                isFlag = self.Flag_Map[x_i][y_i]
-                isMine = self.Mine_Map[x_i][y_i]
-                if isFlag == 0 and isMine == 0:
-                    # no flag, no mine
-                    self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
-                elif isFlag == 1 and isMine == 0:
-                    # have flag, no mine
-                    self.Show_Map[x_i][y_i] = UnMined_Flag
-                elif isFlag == 0 and isMine == 1:
-                    # no flag, have mine
-                    self.Show_Map[x_i][y_i] = Unflagg_Mine
-                elif isFlag == 1 and isMine == 1:
-                    # have flag, have mine
-                    self.Show_Map[x_i][y_i] = Flagged_Mine
+        if self.Status == die:
+            for x_i in range(SIZE_X):
+                for y_i in range(SIZE_Y):
+                    isFlag = self.Flag_Map[x_i][y_i]
+                    isMine = self.Mine_Map[x_i][y_i]
+                    if isFlag == 0 and isMine == 0:
+                        # no flag, no mine
+                        self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
+                    elif isFlag == 1 and isMine == 0:
+                        # have flag, no mine
+                        self.Show_Map[x_i][y_i] = UnMined_Flag
+                    elif isFlag == 0 and isMine == 1:
+                        # no flag, have mine
+                        self.Show_Map[x_i][y_i] = Unflagg_Mine
+                    elif isFlag == 1 and isMine == 1:
+                        # have flag, have mine
+                        self.Show_Map[x_i][y_i] = Flagged_Mine
 
     def Win_Show(self):
-        self.Status = '2'
-        for x_i in range(SIZE_X):
-            for y_i in range(SIZE_Y):
-                isFlag = self.Flag_Map[x_i][y_i]
-                if isFlag == 1:
-                    # have flag and mine
-                    self.Show_Map[x_i][y_i] = Flagged_Mine
-                else:
-                    # no flag and mine
-                    self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
+        if self.Status == win:
+            for x_i in range(SIZE_X):
+                for y_i in range(SIZE_Y):
+                    isFlag = self.Flag_Map[x_i][y_i]
+                    if isFlag == 1:
+                        # have flag and mine
+                        self.Show_Map[x_i][y_i] = Flagged_Mine
+                    else:
+                        # no flag and mine
+                        self.Show_Map[x_i][y_i] = self.Data_Map[x_i][y_i]
 
     def Disp_All(self):
         # print all data of gird
@@ -185,15 +190,24 @@ class Mine_Map:
             print(' ')
         print('\n')
 
-    def Print_Mines(self):
-        # print the grid with mine
+    def Mine_Grid(self):
+        # return the grid of mines
         Mine_List = []
         for x_i in range(SIZE_X):
             for y_i in range(SIZE_Y):
                 if self.Mine_Map[x_i][y_i] == 1:
                     Mine_List.append([x_i, y_i])
+        return Mine_List
+
+    def Print_Mines(self):
+        # print the grid of mines
+        Mine_List = self.Mine_Grid()
 
         for mine in Mine_List:
             x = mine[0]
             y = mine[1]
             print('Mine at (%d,%d)' % (x, y))
+
+    def is_Unknown(self, x, y):
+        grid_data = self.Show_Map[x][y]
+        return (grid_data == Unknown_Grid)
