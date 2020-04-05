@@ -24,10 +24,10 @@ class Mine_Map:
     #   '2' win
     #   '3' dead
 
-    Mine_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
-    Flag_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
-    Data_Map = [[0 for i in range(SIZE_X)] for i in range(SIZE_Y)]
-    Show_Map = [[Unknown_Grid for i in range(SIZE_X)] for i in range(SIZE_Y)]
+    Mine_Map = [[0 for i in range(SIZE_Y)] for i in range(SIZE_X)]
+    Flag_Map = [[0 for i in range(SIZE_Y)] for i in range(SIZE_X)]
+    Data_Map = [[0 for i in range(SIZE_Y)] for i in range(SIZE_X)]
+    Show_Map = [[Unknown_Grid for i in range(SIZE_Y)] for i in range(SIZE_X)]
 
     Status = not_init
 
@@ -46,7 +46,7 @@ class Mine_Map:
 
             if (random_pos is not init_pos) and (random_pos not in Mine_List):
                 Mine_List.append(random_pos)
-                self.Mine_Map[random_pos // SIZE_X][random_pos % SIZE_X] = 1
+                self.Mine_Map[random_pos % SIZE_X][random_pos // SIZE_X] = 1
 
         # upgrade the full map
         # for each empty grid, it shows the number of mines in 8 nearby grids
@@ -211,3 +211,11 @@ class Mine_Map:
     def is_Unknown(self, x, y):
         grid_data = self.Show_Map[x][y]
         return (grid_data == Unknown_Grid)
+
+    def Flag_Num(self):
+        Flags = 0
+        for i in range(SIZE_X):
+            for j in range(SIZE_Y):
+                Flags += int(self.Flag_Map[i][j] == 1)
+        return Flags
+
