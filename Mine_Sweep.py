@@ -30,23 +30,24 @@ class Mine_Map:
     Show_Map = [[Unknown_Grid for i in range(SIZE_Y)] for i in range(SIZE_X)]
 
     Status = not_init
+    Mine_List = []
 
     # init the map with the first click at grid (x,y)
     def __init__(self, x, y):
         print('init at grid (%d,%d)' % (x, y))
         self.Status = alive
 
-        init_pos = x * SIZE_X + y
-        Mine_List = []
+        init_grid = [x, y]
         # random set mine
         # grid (x,y) is not available for a mine
         # grid point have most 1 mine
-        while len(Mine_List) < MINE_NUM:
-            random_pos = random.sample(range(SIZE_X * SIZE_Y), 1)[0]
-
-            if (random_pos is not init_pos) and (random_pos not in Mine_List):
-                Mine_List.append(random_pos)
-                self.Mine_Map[random_pos % SIZE_X][random_pos // SIZE_X] = 1
+        while len(self.Mine_List) < MINE_NUM:
+            random_x = random.sample(range(SIZE_X), 1)[0]
+            random_y = random.sample(range(SIZE_Y), 1)[0]
+            random_grid = [random_x, random_y]
+            if random_grid != init_grid:
+                self.Mine_List.append(random_grid)
+                self.Mine_Map[random_x][random_y] = 1
 
         # upgrade the full map
         # for each empty grid, it shows the number of mines in 8 nearby grids
@@ -190,20 +191,20 @@ class Mine_Map:
             print(' ')
         print('\n')
 
-    def Mine_Grid(self):
-        # return the grid of mines
-        Mine_List = []
-        for x_i in range(SIZE_X):
-            for y_i in range(SIZE_Y):
-                if self.Mine_Map[x_i][y_i] == 1:
-                    Mine_List.append([x_i, y_i])
-        return Mine_List
+    # def Mine_Grid(self):
+    #     # return the grid of mines
+    #     Mine_List = []
+    #     for x_i in range(SIZE_X):
+    #         for y_i in range(SIZE_Y):
+    #             if self.Mine_Map[x_i][y_i] == 1:
+    #                 Mine_List.append([x_i, y_i])
+    #     return Mine_List
 
     def Print_Mines(self):
         # print the grid of mines
-        Mine_List = self.Mine_Grid()
+        # Mine_List = self.Mine_Grid()
 
-        for mine in Mine_List:
+        for mine in self.Mine_List:
             x = mine[0]
             y = mine[1]
             print('Mine at (%d,%d)' % (x, y))
@@ -212,10 +213,17 @@ class Mine_Map:
         grid_data = self.Show_Map[x][y]
         return (grid_data == Unknown_Grid)
 
+    def Get_Flag_List(self):
+        flag_list = []
+        for i in range(SIZE_X):
+            for j in range(SIZE_Y):
+                if self.Flag_Map[i][j] == 1:
+                    flag_list.append([i, j])
+        return flag_list
+
     def Flag_Num(self):
         Flags = 0
         for i in range(SIZE_X):
             for j in range(SIZE_Y):
                 Flags += int(self.Flag_Map[i][j] == 1)
         return Flags
-
