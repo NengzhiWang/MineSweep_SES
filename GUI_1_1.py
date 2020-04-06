@@ -51,7 +51,15 @@ class Mine_GUI:
                 self.Button_List[x][y].bind(
                     '<Button-1>',
                     lambda event, a=x, b=y: self.Callback_Left(a, b))
-                # right
+                # right or middle
+
+                # Button-2
+                #   Win and Linux: Middle
+                #   MacOS:  Right
+
+                self.Button_List[x][y].bind(
+                    '<Button-2>',
+                    lambda event, a=x, b=y: self.Callback_Right(a, b))
                 self.Button_List[x][y].bind(
                     '<Button-3>',
                     lambda event, a=x, b=y: self.Callback_Right(a, b))
@@ -139,7 +147,14 @@ class Mine_GUI:
 
     def Callback_Auto_Play(self, event):
         if self.Steps != 0:
-            Mine_List = self.Mines.Mine_Grid()
+            Flag_list = self.Mines.Get_Flag_List()
+            for each_flag in Flag_list:
+                x = each_flag[0]
+                y = each_flag[1]
+                self.Mines.Flag(x, y)
+                self.GUI_Refresh(x, y)
+
+            Mine_List = self.Mines.Mine_List
             operate_list = []
             while self.Mines.Status == alive:
                 x = random.sample(range(SIZE_X), 1)[0]
