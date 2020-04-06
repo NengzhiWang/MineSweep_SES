@@ -1,9 +1,11 @@
+import random
+import time
 import tkinter as tk
+from datetime import datetime
 from tkinter import messagebox
+
 from config import *
 from Mine_Sweep import Mine_Map
-from datetime import datetime
-import math
 
 
 class Mine_GUI:
@@ -28,26 +30,11 @@ class Mine_GUI:
             "8": tk.PhotoImage(file='./Image/tile_8.gif')
         }
 
-        self.GUI_Setup()
+        self.Mine_Panel_Setup()
+        self.Playing_Data_Panel_Setup()
+        self.Control_Panel_Setup()
 
-        # playing data shown
-        self.playing_data_labels = {
-            'time': tk.Label(self.gui, text="00:00:00"),
-            'Mines': tk.Label(self.gui, text="Mines: 0"),
-            'Flags': tk.Label(self.gui, text="Flags: 0")
-        }
-
-        self.playing_data_labels["time"].grid(row=SIZE_X + 1,
-                                              column=0,
-                                              columnspan=SIZE_Y // 3)
-        self.playing_data_labels['Mines'].grid(row=SIZE_X + 1,
-                                               column=SIZE_Y // 3,
-                                               columnspan=SIZE_Y // 3)
-        self.playing_data_labels['Flags'].grid(row=SIZE_X + 1,
-                                               column=2 * SIZE_Y // 3,
-                                               columnspan=SIZE_Y // 3)
-
-    def GUI_Setup(self):
+    def Mine_Panel_Setup(self):
 
         # init grids as tkinter.button
         self.Button_List = [[
@@ -73,6 +60,47 @@ class Mine_GUI:
         self.Steps = 0
         dt = datetime.now()
         self.start = 3600 * dt.hour + 60 * dt.minute + dt.second
+        self.gui.update_idletasks()
+
+    def Playing_Data_Panel_Setup(self):
+        # playing data shown
+        self.playing_data_labels = {
+            'time': tk.Label(self.gui, text='00:00:00'),
+            'Mines': tk.Label(self.gui, text='Mines: 0'),
+            'Flags': tk.Label(self.gui, text='Flags: 0')
+        }
+
+        self.playing_data_labels['time'].grid(row=SIZE_X + 1,
+                                              column=0,
+                                              columnspan=SIZE_Y // 3)
+        self.playing_data_labels['Mines'].grid(row=SIZE_X + 1,
+                                               column=SIZE_Y // 3,
+                                               columnspan=SIZE_Y // 3)
+        self.playing_data_labels['Flags'].grid(row=SIZE_X + 1,
+                                               column=2 * SIZE_Y // 3,
+                                               columnspan=SIZE_Y // 3)
+        self.gui.update_idletasks()
+
+    def Control_Panel_Setup(self):
+        # playing data shown
+        self.control_buttons = {
+            'new_game': tk.Button(self.gui, text='new game'),
+            'replay': tk.Button(self.gui, text='replay'),
+            'auto_play': tk.Button(self.gui, text='auto play')
+        }
+        self.control_buttons['auto_play'].bind('<Button-1>',
+                                               self.Callback_Auto_Play)
+
+        self.control_buttons['new_game'].grid(row=SIZE_X + 2,
+                                              column=0,
+                                              columnspan=SIZE_Y // 3)
+        self.control_buttons['replay'].grid(row=SIZE_X + 2,
+                                            column=SIZE_Y // 3,
+                                            columnspan=SIZE_Y // 3)
+        self.control_buttons['auto_play'].grid(row=SIZE_X + 2,
+                                               column=2 * SIZE_Y // 3,
+                                               columnspan=SIZE_Y // 3)
+        self.gui.update_idletasks()
 
     # event function of left button click
     def Callback_Left(self, x, y):
@@ -109,6 +137,24 @@ class Mine_GUI:
 
         self.Steps += 1
 
+    def Callback_Auto_Play(self, event):
+        if self.Steps != 0:
+            Mine_List = self.Mines.Mine_Grid()
+            operate_list = []
+            while self.Mines.Status == alive:
+                x = random.sample(range(SIZE_X), 1)[0]
+                y = random.sample(range(SIZE_Y), 1)[0]
+                grid = [x, y]
+                if self.Mines.is_Unknown(x, y):
+                    if grid not in operate_list:
+                        operate_list.append(grid)
+                        if grid not in Mine_List:
+                            self.Mines.Click(x, y)
+                        elif grid in Mine_List:
+                            self.Mines.Flag(x, y)
+                    self.GUI_Refresh(x, y)
+            self.Message()
+
     # upgrade showing on GUI
     def GUI_Refresh(self, x, y):
         # refresh the grid with operation firstly
@@ -133,6 +179,7 @@ class Mine_GUI:
         self.playing_data_labels['time'].configure(text=time_str)
         self.playing_data_labels['Mines'].configure(text=mine_str)
         self.playing_data_labels['Flags'].configure(text=flag_str)
+        self.gui.update_idletasks()
 
     # Message box
     def Message(self):
