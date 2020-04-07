@@ -177,6 +177,34 @@ class Mine_Map:
                             if self.Show_Map[px][py] != '0':
                                 self.Click(px, py)
 
+    def Auto_Play(self):
+        if self.Status == self.alive:
+            Flag_List = self.Get_Flag_List()
+            for each_flag in Flag_List:
+                x = each_flag[0]
+                y = each_flag[1]
+                self.Flag(x, y)
+            Total_Grid = self.SIZE_X * self.SIZE_Y
+            operate_list = []
+            while len(self.Known_Grid()) < Total_Grid - self.MINE_NUM:
+                Known_List = self.Known_Grid()
+                for x in range(self.SIZE_X):
+                    for y in range(self.SIZE_Y):
+                        grid = [x, y]
+                        not_mine = grid not in self.Mine_List
+                        is_known = grid in Known_List
+                        not_operate = grid not in operate_list
+                        not_0 = (self.Show_Map[x][y] != '0')
+                        if not_mine and is_known and not_operate and not_0:
+                            self.Expand(x, y)
+                            operate_list.append(grid)
+            for x in range(self.SIZE_X):
+                for y in range(self.SIZE_Y):
+                    grid = [x, y]
+                    Flag_list = self.Get_Flag_List()
+                    if grid in self.Mine_List and grid not in Flag_list:
+                        self.Flag(x, y)
+
     def Replay(self):
         if self.Steps != 0:
             for i in range(self.SIZE_X):

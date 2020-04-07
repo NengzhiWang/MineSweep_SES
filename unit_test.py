@@ -1,15 +1,17 @@
 import random
-import unittest
-from Mine_Map import Mine_Map
 import sys
+import unittest
+
+from Mine_Map import Mine_Map
+
 sys.setrecursionlimit(10000)
 # Adjust recursive tree limits
 # default is 1000?
 
 
 class Mine_Test(unittest.TestCase):
-    SIZE_X = 256
-    SIZE_Y = 256
+    SIZE_X = 128
+    SIZE_Y = 128
     MINE_NUM = (SIZE_X * SIZE_Y) // 8
 
     # init map and setup mines
@@ -63,6 +65,11 @@ class Mine_Test(unittest.TestCase):
         # status test
         self.assertEqual(Old_status, self.Mines.die)
         self.assertEqual(New_status, self.Mines.alive)
+
+    def test_Auto_Play(self):
+        self.Mines.Auto_Play()
+        status = self.Mines.Status
+        self.assertEqual(status, self.Mines.win)
 
 
 if __name__ == "__main__":

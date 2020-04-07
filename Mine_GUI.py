@@ -116,12 +116,14 @@ class Mine_GUI(Mine_Map):
             'quit': tk.Button(self.gui, text='QUIT')
         }
 
-        self.control_buttons['new_game'].bind('<Button-1>',
-                                              self.Callback_New_Game)
-        self.control_buttons['replay'].bind('<Button-1>', self.Callback_Replay)
-        self.control_buttons['auto_play'].bind('<Button-1>',
-                                               self.Callback_Auto_Play)
-        self.control_buttons['quit'].bind('<Button-1>', self.Callback_Quit)
+        self.control_buttons['new_game'].bind(
+            '<Button-1>', lambda event: self.Callback_New_Game())
+        self.control_buttons['replay'].bind(
+            '<Button-1>', lambda event: self.Callback_Replay())
+        self.control_buttons['auto_play'].bind(
+            '<Button-1>', lambda event: self.Callback_Auto_Play())
+        self.control_buttons['quit'].bind('<Button-1>',
+                                          lambda event: self.Callback_Quit())
 
         self.control_buttons['new_game'].grid(row=self.SIZE_X + 2,
                                               column=0,
@@ -182,7 +184,7 @@ class Mine_GUI(Mine_Map):
         self.gui.update_idletasks()
 
     # auto play
-    def Callback_Auto_Play(self, event):
+    def Callback_Auto_Play(self):
         Total_Grid = self.SIZE_X * self.SIZE_Y
         if self.Mines.Steps != 0:
             Flag_list = self.Mines.Get_Flag_List()
@@ -222,10 +224,7 @@ class Mine_GUI(Mine_Map):
             self.Message()
 
     # have a new game
-    def Callback_New_Game(self, event):
-        self.New_Game()
-
-    def New_Game(self):
+    def Callback_New_Game(self):
         self.playing_data_labels['Steps'].configure(text='')
         self.playing_data_labels['Mines'].configure(text='')
         self.playing_data_labels['Flags'].configure(text='')
@@ -235,17 +234,15 @@ class Mine_GUI(Mine_Map):
         self.Control_Panel_Setup()
 
     # replay game in  the same map
-    def Callback_Replay(self, event):
-        self.Replay()
+    def Callback_Replay(self):
 
-    def Replay(self):
         # if self.Mines.Steps != 0:
         self.Mines.Replay()
         self.Mine_Panel_Setup()
         self.Playing_Data_Panel_Setup()
         self.Control_Panel_Setup()
 
-    def Callback_Quit(self, event):
+    def Callback_Quit(self):
         self.gui.destroy()
 
     # upgrade showing on GUI
@@ -281,4 +278,4 @@ class Mine_GUI(Mine_Map):
         elif S == self.Mines.win:
             messagebox.showinfo(title='WINNING',
                                 message='You are the winner!!!')
-            self.New_Game()
+            self.Callback_New_Game()
