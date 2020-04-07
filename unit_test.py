@@ -1,6 +1,6 @@
 import random
 import unittest
-from Mine_Sweep import Mine_Map
+from Mine_Map import Mine_Map
 import sys
 sys.setrecursionlimit(10000)
 # Adjust recursive tree limits
