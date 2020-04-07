@@ -1,5 +1,5 @@
 from config import SIZE_X, SIZE_Y, alive, die, not_init, win
-from Mine_Sweep import Mine_Map
+from Mine_Map import Mine_Map
 
 if __name__ == "__main__":
 

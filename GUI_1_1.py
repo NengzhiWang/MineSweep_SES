@@ -5,7 +5,7 @@ from datetime import datetime
 from tkinter import messagebox
 
 from config import *
-from Mine_Sweep import Mine_Map
+from Mine_Map import Mine_Map
 
 
 class Mine_GUI:
