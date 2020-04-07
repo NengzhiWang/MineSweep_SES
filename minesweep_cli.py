@@ -1,21 +1,18 @@
-from config import SIZE_X, SIZE_Y, alive, die, not_init, win
 from Mine_Map import Mine_Map
 
 if __name__ == "__main__":
+    Mine = Mine_Map(5, 5, 5)
 
-    Steps = 0
     Continue_Game = True
-    while Continue_Game:
+    while Mine.Status != Mine.win and Mine.Status != Mine.die:
 
-        if Steps == 0:
+        if Mine.Status == Mine.inited:
             print('Game Start!')
-            print('Map Size (%d,%d)' % (SIZE_X, SIZE_Y))
+            print('Map Size (%d,%d)' % (Mine.SIZE_X, Mine.SIZE_Y))
             print('init your game')
             x = int(input('x='))
             y = int(input('y='))
-
-            Mine = Mine_Map(x, y)
-            Mine.Print_Mines()
+            Mine.Mines_Setup(x, y)
         else:
             x = int(input('x='))
             y = int(input('y='))
@@ -26,6 +23,3 @@ if __name__ == "__main__":
                 Mine.Flag(x, y)
 
         Mine.Disp_UI()
-        Steps += 1
-        if Mine.Status != alive:
-            Continue_Game = False
