@@ -192,7 +192,7 @@ class Mine_Map:
                     for y in range(self.SIZE_Y):
                         grid = [x, y]
                         not_mine = grid not in self.Mine_List
-                        is_known = grid in Known_List
+                        is_known = grid in self.Known_Grid()
                         not_operate = grid not in operate_list
                         not_0 = (self.Show_Map[x][y] != '0')
                         if not_mine and is_known and not_operate and not_0:

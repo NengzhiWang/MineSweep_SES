@@ -1,12 +1,14 @@
 import random
 import sys
+import tkinter as tk
 import unittest
 
+from Mine_GUI import Mine_GUI
 from Mine_Map import Mine_Map
 
-sys.setrecursionlimit(10000)
 # Adjust recursive tree limits
 # default is 1000?
+sys.setrecursionlimit(10000)
 
 
 class Mine_Test(unittest.TestCase):
@@ -20,6 +22,10 @@ class Mine_Test(unittest.TestCase):
         x = random.randint(0, self.SIZE_X - 1)
         y = random.randint(0, self.SIZE_Y - 1)
         self.Mines.Mines_Setup(x, y)
+
+        self.win = tk.Tk()
+        self.GUI = Mine_GUI(self.win, self.SIZE_X, self.SIZE_Y, self.MINE_NUM)
+        self.GUI.Callback_Left(x, y)
 
     # test win the game, flag each mine
     def test_Win_Game(self):
