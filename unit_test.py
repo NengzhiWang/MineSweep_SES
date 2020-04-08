@@ -19,8 +19,8 @@ sys.setrecursionlimit(10000)
 
 
 class Mine_Test(unittest.TestCase):
-    SIZE_X = 96
-    SIZE_Y = 96
+    SIZE_X = 256
+    SIZE_Y = 256
     MINE_NUM = (SIZE_X * SIZE_Y) // 8
 
     # init map and setup mines
@@ -93,7 +93,8 @@ class Mine_Test(unittest.TestCase):
             y = op[1]
             f = op[2]
             if f == 1:
-                self.Mines.Click(x, y)
+                if self.Mines.Show_Map[x][y] == self.Mines.Unknown_Grid:
+                    self.Mines.Click(x, y)
             elif f == 2:
                 self.Mines.Flag(x, y)
         status = self.Mines.Status

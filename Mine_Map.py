@@ -192,6 +192,15 @@ class Mine_Map:
                 self.Flag(x, y)
                 Operate_List.append([x, y, 2])
 
+            # random click no mine grid
+            # avoid cannot expanded situations
+            while self.Steps < 5:
+                x = random.randint(0, self.SIZE_X - 1)
+                y = random.randint(0, self.SIZE_Y - 1)
+                if [x, y] not in self.Mine_List:
+                    self.Click(x, y)
+                    Operate_List.append([x, y, 1])
+
             Total_Grid = self.SIZE_X * self.SIZE_Y
             operate_list_cache_1 = []
             operate_list_cache_2 = []
