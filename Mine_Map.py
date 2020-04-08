@@ -157,8 +157,8 @@ class Mine_Map:
                 # 8 nearby
                 self.Show_Upgrade(x + 1, y + 1)
                 self.Show_Upgrade(x - 1, y + 1)
-                self.Show_Upgrade(x, y + 1)
-                self.Show_Upgrade(x, y - 1)
+                self.Show_Upgrade(x - 1, y - 1)
+                self.Show_Upgrade(x + 1, y - 1)
 
     def Flag(self, x, y):
         if self.Status == self.alive:
