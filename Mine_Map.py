@@ -68,7 +68,10 @@ class Mine_Map:
             if random_grid != init_grid and random_grid not in self.Mine_List:
                 self.Mine_List.append(random_grid)
                 self.Mine_Map[random_x][random_y] = 1
+        self.Map_Setup()
+        self.Click(x, y)
 
+    def Map_Setup(self):
         # upgrade the full map
         # for each empty grid, it shows the number of mines in 8 nearby grids
         for x_i in range(self.SIZE_X):
@@ -88,7 +91,6 @@ class Mine_Map:
                     self.Data_Map[x_i][y_i] = 'M'
         # print(len(self.Mine_List))
         self.Print_Mines()
-        self.Click(x, y)
 
     def Click(self, x, y):
         if self.Status == self.alive:
@@ -164,7 +166,7 @@ class Mine_Map:
                     print('win')
                     self.End_Show()
 
-    def Expand(self, x, y):
+    def Expand(self, x, y, operate_list):
         if self.Steps != 0:
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:
@@ -176,34 +178,55 @@ class Mine_Map:
                         if [px, py] not in self.Mine_List:
                             if self.Show_Map[px][py] != '0':
                                 self.Click(px, py)
+                                operate_list.append([px, py])
 
+    # This function includes a lot of repeat operations
     def Auto_Play(self):
+        Operate_List = []
         if self.Status == self.alive:
+            # remove all flags in the map
             Flag_List = self.Get_Flag_List()
             for each_flag in Flag_List:
                 x = each_flag[0]
                 y = each_flag[1]
                 self.Flag(x, y)
+                Operate_List.append([x, y, 2])
+
             Total_Grid = self.SIZE_X * self.SIZE_Y
-            operate_list = []
+            operate_list_cache_1 = []
+            operate_list_cache_2 = []
+            # Click not mine grid, until all no mine grid is known
+            # record operations in List
             while len(self.Known_Grid()) < Total_Grid - self.MINE_NUM:
                 Known_List = self.Known_Grid()
                 for x in range(self.SIZE_X):
                     for y in range(self.SIZE_Y):
                         grid = [x, y]
                         not_mine = grid not in self.Mine_List
-                        is_known = grid in self.Known_Grid()
-                        not_operate = grid not in operate_list
+                        is_known = grid in Known_List
+                        not_operate = [x, y] not in operate_list_cache_1
                         not_0 = (self.Show_Map[x][y] != '0')
                         if not_mine and is_known and not_operate and not_0:
-                            self.Expand(x, y)
-                            operate_list.append(grid)
+                            self.Expand(x, y, operate_list_cache_2)
+                            operate_list_cache_1.append([x, y])
+
+            # Remove repeat clicks in List
+            for op in operate_list_cache_2:
+                x = op[0]
+                y = op[1]
+                if [x, y] not in self.Mine_List:
+                    if [x, y, 1] not in Operate_List:
+                        Operate_List.append([x, y, 1])
+            # Flag mines
             for x in range(self.SIZE_X):
                 for y in range(self.SIZE_Y):
                     grid = [x, y]
                     Flag_list = self.Get_Flag_List()
                     if grid in self.Mine_List and grid not in Flag_list:
                         self.Flag(x, y)
+                        Operate_List.append([x, y, 2])
+
+        return Operate_List
 
     def Replay(self):
         if self.Steps != 0:
