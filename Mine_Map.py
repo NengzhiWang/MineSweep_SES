@@ -107,6 +107,27 @@ class Mine_Map:
                     # expand the displayed range recursively
                     self.Show_Upgrade(x, y)
 
+    def Quick_Click(self, x, y):
+        if self.Status == self.alive:
+            NearbyFlag = str(self.NearbyFlag_Num(x, y))
+            if NearbyFlag == self.Show_Map[x][y]:
+                self.Steps += 1
+                for dx in [-1, 0, 1]:
+                    for dy in [-1, 0, 1]:
+                        px = x + dx
+                        py = y + dy
+                        inRange_x = (px >= 0 and px < self.SIZE_X)
+                        inRange_y = (py >= 0 and py < self.SIZE_Y)
+                        if inRange_x and inRange_y:
+                            if self.Show_Map[px][py] == self.Unknown_Grid:
+                                if self.Data_Map[px][py] == 'M':
+                                    self.Status = self.die
+                                    print('died')
+                                    self.End_Show()
+                                else:
+                                    self.Show_Map[px][py] = self.Data_Map[px][
+                                        py]
+
     def Show_Upgrade(self, x, y):
         # recursive termination
         # out the range
@@ -334,3 +355,15 @@ class Mine_Map:
                 ]:
                     Grid_List.append(grid)
         return Grid_List
+
+    def NearbyFlag_Num(self, x, y):
+        NearbyFlags = 0
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                px = x + dx
+                py = y + dy
+                inRange_x = (px >= 0 and px < self.SIZE_X)
+                inRange_y = (py >= 0 and py < self.SIZE_Y)
+                if inRange_x and inRange_y:
+                    NearbyFlags += self.Flag_Map[px][py]
+        return NearbyFlags

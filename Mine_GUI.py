@@ -171,7 +171,8 @@ class Mine_GUI(Mine_Map):
             if self.Mines.Show_Map[x][y] == self.Mines.Unknown_Grid:
                 # Use function from object Mines
                 self.Mines.Click(x, y)
-
+            else:
+                self.Mines.Quick_Click(x, y)
             # Refresh GUI
             self.GUI_Refresh(x, y)
 
