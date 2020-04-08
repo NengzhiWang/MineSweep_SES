@@ -1,4 +1,5 @@
 import copy
+import time
 import tkinter as tk
 from tkinter import messagebox
 
@@ -9,7 +10,10 @@ class Mine_GUI(Mine_Map):
     def __init__(self, gui, x, y, n):
 
         self.gui = gui
+        # GUI title
         self.gui.title('MineSweep SES')
+        # Cannot resize
+        self.gui.resizable(0, 0)
         # import images and load into dict
         # init object of Mine_Map
         self.SIZE_X = x
@@ -37,7 +41,7 @@ class Mine_GUI(Mine_Map):
             '7': tk.PhotoImage(file='./Image/tile_7.gif'),
             '8': tk.PhotoImage(file='./Image/tile_8.gif')
         }
-
+        self.Show_Data = False
         # setup panels of GUI
         self.Playing_Data_Panel_Setup()
         self.Control_Panel_Setup()
@@ -89,7 +93,8 @@ class Mine_GUI(Mine_Map):
             'Mines': tk.Label(self.gui, text='Mines: 0'),
             'Flags': tk.Label(self.gui, text='Flags: 0'),
             'Row': tk.Label(self.gui, text='Row: ' + str(self.SIZE_X)),
-            'Col': tk.Label(self.gui, text='Col: ' + str(self.SIZE_Y))
+            'Col': tk.Label(self.gui, text='Col: ' + str(self.SIZE_Y)),
+            'Data': tk.Label(self.gui, text='')
         }
 
         self.playing_data_labels['Steps'].grid(row=self.SIZE_X + 1,
@@ -107,6 +112,9 @@ class Mine_GUI(Mine_Map):
         self.playing_data_labels['Col'].grid(row=self.SIZE_X + 3,
                                              column=self.SIZE_Y // 3,
                                              columnspan=self.SIZE_Y // 3)
+        self.playing_data_labels['Data'].grid(row=self.SIZE_X + 3,
+                                              column=2 * self.SIZE_Y // 3,
+                                              columnspan=self.SIZE_Y // 3)
         self.gui.update_idletasks()
 
     def Control_Panel_Setup(self):
@@ -115,7 +123,8 @@ class Mine_GUI(Mine_Map):
             'new_game': tk.Button(self.gui, text='New Game'),
             'replay': tk.Button(self.gui, text='Replay'),
             'auto_play': tk.Button(self.gui, text='Auto Play'),
-            'quit': tk.Button(self.gui, text='QUIT')
+            'quit': tk.Button(self.gui, text='QUIT'),
+            'cheat': tk.Button(self.gui, text='CHEAT')
         }
 
         self.control_buttons['new_game'].bind(
@@ -126,6 +135,8 @@ class Mine_GUI(Mine_Map):
             '<Button-1>', lambda event: self.Callback_Auto_Play())
         self.control_buttons['quit'].bind('<Button-1>',
                                           lambda event: self.Callback_Quit())
+        self.control_buttons['cheat'].bind('<Button-1>',
+                                           lambda event: self.Callback_Cheat())
 
         self.control_buttons['new_game'].grid(row=self.SIZE_X + 2,
                                               column=0,
@@ -136,9 +147,12 @@ class Mine_GUI(Mine_Map):
         self.control_buttons['auto_play'].grid(row=self.SIZE_X + 2,
                                                column=2 * self.SIZE_Y // 3,
                                                columnspan=self.SIZE_Y // 3)
-        self.control_buttons['quit'].grid(row=self.SIZE_X + 3,
+        self.control_buttons['quit'].grid(row=self.SIZE_X + 4,
                                           column=2 * self.SIZE_Y // 3,
                                           columnspan=self.SIZE_Y // 3)
+        self.control_buttons['cheat'].grid(row=self.SIZE_X + 4,
+                                           column=self.SIZE_Y // 3,
+                                           columnspan=self.SIZE_Y // 3)
         self.gui.update_idletasks()
 
     # event function of left button click
@@ -151,7 +165,6 @@ class Mine_GUI(Mine_Map):
             self.Mines.Mines_Setup(x, y)
             # Refresh GUI
             self.GUI_Refresh(x, y)
-            self.Message()
 
         else:
             # click grid
@@ -161,7 +174,6 @@ class Mine_GUI(Mine_Map):
 
             # Refresh GUI
             self.GUI_Refresh(x, y)
-            self.Message()
 
     # event function of right button click
     def Callback_Right(self, x, y):
@@ -171,18 +183,22 @@ class Mine_GUI(Mine_Map):
             print('init your game at (%d,%d)' % (x, y))
             self.Mines.Mines_Setup(x, y)
             self.GUI_Refresh(x, y)
-            self.Message()
         # flag and unflag
         else:
             self.Mines.Flag(x, y)
             self.GUI_Refresh(x, y)
-            self.Message()
 
     def Callback_Enter(self, x, y):
         row_str = 'Row: ' + str(x)
         col_str = 'Col: ' + str(y)
         self.playing_data_labels['Row'].configure(text=row_str)
         self.playing_data_labels['Col'].configure(text=col_str)
+        if self.Show_Data:
+            self.playing_data_labels['Data'].configure(
+                text=self.Mines.Data_Map[x][y])
+        else:
+            self.playing_data_labels['Data'].configure(text='')
+
         self.gui.update_idletasks()
 
     # auto play
@@ -197,13 +213,15 @@ class Mine_GUI(Mine_Map):
             y = op[1]
             f = op[2]
             if f == 1:
-                self.Mines.Click(x, y)
-                self.GUI_Refresh(x, y)
-                self.Message()
+                if self.Mines.Show_Map[x][y] == self.Mines.Unknown_Grid:
+                    self.Mines.Click(x, y)
+                    time.sleep(0.25)
             elif f == 2:
                 self.Mines.Flag(x, y)
-                self.GUI_Refresh(x, y)
-                self.Message()
+            self.GUI_Refresh(x, y)
+
+    def Callback_Cheat(self):
+        self.Show_Data = not self.Show_Data
 
     # have a new game
     def Callback_New_Game(self):
@@ -239,7 +257,7 @@ class Mine_GUI(Mine_Map):
             for j in range(self.SIZE_Y):
                 M = self.Mines.Show_Map[i][j]
                 self.Button_List[i][j].configure(image=self.images[M])
-        self.gui.update_idletasks()
+        # self.gui.update()
 
         step_str = 'Steps: ' + str(self.Mines.Steps)
         flag_num = self.Mines.Flag_Num()
@@ -250,7 +268,8 @@ class Mine_GUI(Mine_Map):
         self.playing_data_labels['Steps'].configure(text=step_str)
         self.playing_data_labels['Mines'].configure(text=mine_str)
         self.playing_data_labels['Flags'].configure(text=flag_str)
-        self.gui.update_idletasks()
+        self.gui.update()
+        self.Message()
 
     # Message box
     def Message(self):
@@ -261,4 +280,4 @@ class Mine_GUI(Mine_Map):
         elif S == self.Mines.win:
             messagebox.showinfo(title='WINNING',
                                 message='You are the winner!!!')
-            # self.Callback_New_Game()
+            self.Callback_New_Game()
