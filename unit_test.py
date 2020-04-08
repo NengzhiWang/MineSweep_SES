@@ -19,8 +19,8 @@ sys.setrecursionlimit(10000)
 
 
 class Mine_Test(unittest.TestCase):
-    SIZE_X = 192
-    SIZE_Y = 192
+    SIZE_X = 128
+    SIZE_Y = 128
     MINE_NUM = (SIZE_X * SIZE_Y) // 8
 
     # init map and setup mines
