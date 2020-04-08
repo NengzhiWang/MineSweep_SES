@@ -1,5 +1,7 @@
+import copy
 import tkinter as tk
 from tkinter import messagebox
+
 from Mine_Map import Mine_Map
 
 
@@ -185,59 +187,41 @@ class Mine_GUI(Mine_Map):
 
     # auto play
     def Callback_Auto_Play(self):
-        Total_Grid = self.SIZE_X * self.SIZE_Y
-        if self.Mines.Steps != 0:
-            Flag_list = self.Mines.Get_Flag_List()
-            Mine_List = self.Mines.Mine_List
-            operate_list = []
-            # unflaged each flag
-            for each_flag in Flag_list:
-                x = each_flag[0]
-                y = each_flag[1]
+        # DO NOT USE '=', it's reference not copy
+        new_Mine = copy.deepcopy(self.Mines)
+
+        Operate_List = new_Mine.Auto_Play()
+        # del new_Mine
+        for op in Operate_List:
+            x = op[0]
+            y = op[1]
+            f = op[2]
+            if f == 1:
+                self.Mines.Click(x, y)
+                self.GUI_Refresh(x, y)
+                self.Message()
+            elif f == 2:
                 self.Mines.Flag(x, y)
                 self.GUI_Refresh(x, y)
                 self.Message()
-            # start from known grid and expand grids
-            while len(self.Mines.Known_Grid()) < Total_Grid - self.MINE_NUM:
-                Known_List = self.Mines.Known_Grid()
-                for x in range(self.SIZE_X):
-                    for y in range(self.SIZE_Y):
-                        grid = [x, y]
-                        not_mine = grid not in Mine_List
-                        is_known = grid in Known_List
-                        not_operate = grid not in operate_list
-                        not_0 = (self.Mines.Show_Map[x][y] != '0')
-                        if not_mine and is_known and not_operate and not_0:
-                            self.Mines.Expand(x, y)
-                            operate_list.append(grid)
-                self.GUI_Refresh(x, y)
-                self.Message()
-
-            # flag all mines
-            for x in range(self.SIZE_X):
-                for y in range(self.SIZE_Y):
-                    grid = [x, y]
-                    Flag_list = self.Mines.Get_Flag_List()
-                    if grid in Mine_List and grid not in Flag_list:
-                        self.Mines.Flag(x, y)
-            self.GUI_Refresh(x, y)
-            self.Message()
 
     # have a new game
     def Callback_New_Game(self):
         self.playing_data_labels['Steps'].configure(text='')
         self.playing_data_labels['Mines'].configure(text='')
         self.playing_data_labels['Flags'].configure(text='')
+        # re_init opject
         self.Mines = Mine_Map(self.SIZE_X, self.SIZE_Y, self.MINE_NUM)
+        # reset panels
         self.Mine_Panel_Setup()
         self.Playing_Data_Panel_Setup()
         self.Control_Panel_Setup()
 
     # replay game in  the same map
     def Callback_Replay(self):
-
-        # if self.Mines.Steps != 0:
+        # reset object
         self.Mines.Replay()
+        # reset panels
         self.Mine_Panel_Setup()
         self.Playing_Data_Panel_Setup()
         self.Control_Panel_Setup()
@@ -273,9 +257,8 @@ class Mine_GUI(Mine_Map):
         S = self.Mines.Status
         if S == self.Mines.die:
             messagebox.showerror(title='DIED', message='You are died!!!')
-            # self.New_Game()
 
         elif S == self.Mines.win:
             messagebox.showinfo(title='WINNING',
                                 message='You are the winner!!!')
-            self.Callback_New_Game()
+            # self.Callback_New_Game()
