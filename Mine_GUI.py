@@ -136,13 +136,13 @@ class Mine_GUI(Mine_Map):
         self.__playing_data_labels['Flags'].grid(row=self.__SIZE_X + 1,
                                                  column=2 * self.__SIZE_Y // 3,
                                                  columnspan=self.__SIZE_Y // 3)
-        self.__playing_data_labels['Row'].grid(row=self.__SIZE_X + 3,
+        self.__playing_data_labels['Row'].grid(row=self.__SIZE_X + 2,
                                                column=0,
                                                columnspan=self.__SIZE_Y // 3)
-        self.__playing_data_labels['Col'].grid(row=self.__SIZE_X + 3,
+        self.__playing_data_labels['Col'].grid(row=self.__SIZE_X + 2,
                                                column=self.__SIZE_Y // 3,
                                                columnspan=self.__SIZE_Y // 3)
-        self.__playing_data_labels['Data'].grid(row=self.__SIZE_X + 3,
+        self.__playing_data_labels['Data'].grid(row=self.__SIZE_X + 2,
                                                 column=2 * self.__SIZE_Y // 3,
                                                 columnspan=self.__SIZE_Y // 3)
         self.__gui.update_idletasks()
@@ -161,6 +161,7 @@ class Mine_GUI(Mine_Map):
             'new_game': tk.Button(self.__gui, text='New Game'),
             'replay': tk.Button(self.__gui, text='Replay'),
             'auto_play': tk.Button(self.__gui, text='Auto Play'),
+            'guide': tk.Button(self.__gui, text='GUIDE'),
             'cheat': tk.Button(self.__gui, text='CHEAT'),
             'quit': tk.Button(self.__gui, text='QUIT')
         }
@@ -171,26 +172,32 @@ class Mine_GUI(Mine_Map):
             '<Button-1>', lambda event: self.__Callback_Replay())
         self.__control_buttons['auto_play'].bind(
             '<Button-1>', lambda event: self.__Callback_Auto_Play())
-        self.__control_buttons['quit'].bind(
-            '<Button-1>', lambda event: self.__Callback_Quit())
+        self.__control_buttons['guide'].bind(
+            '<Button-1>', lambda event: self.__Callback_Guide())
         self.__control_buttons['cheat'].bind(
             '<Button-1>', lambda event: self.__Callback_Cheat())
+        self.__control_buttons['quit'].bind(
+            '<Button-1>', lambda event: self.__Callback_Quit())
 
-        self.__control_buttons['new_game'].grid(row=self.__SIZE_X + 2,
+        self.__control_buttons['new_game'].grid(row=self.__SIZE_X + 3,
                                                 column=0,
                                                 columnspan=self.__SIZE_Y // 3)
-        self.__control_buttons['replay'].grid(row=self.__SIZE_X + 2,
+        self.__control_buttons['replay'].grid(row=self.__SIZE_X + 3,
                                               column=self.__SIZE_Y // 3,
                                               columnspan=self.__SIZE_Y // 3)
-        self.__control_buttons['auto_play'].grid(row=self.__SIZE_X + 2,
+        self.__control_buttons['auto_play'].grid(row=self.__SIZE_X + 3,
                                                  column=2 * self.__SIZE_Y // 3,
                                                  columnspan=self.__SIZE_Y // 3)
-        self.__control_buttons['quit'].grid(row=self.__SIZE_X + 4,
-                                            column=2 * self.__SIZE_Y // 3,
-                                            columnspan=self.__SIZE_Y // 3)
+        self.__control_buttons['guide'].grid(row=self.__SIZE_X + 4,
+                                             column=0,
+                                             columnspan=self.__SIZE_Y // 3)
         self.__control_buttons['cheat'].grid(row=self.__SIZE_X + 4,
                                              column=self.__SIZE_Y // 3,
                                              columnspan=self.__SIZE_Y // 3)
+        self.__control_buttons['quit'].grid(row=self.__SIZE_X + 4,
+                                            column=2 * self.__SIZE_Y // 3,
+                                            columnspan=self.__SIZE_Y // 3)
+
         self.__gui.update_idletasks()
 
     def __Callback_Left(self, x, y):
@@ -211,7 +218,7 @@ class Mine_GUI(Mine_Map):
 
         else:
             # click grid
-            if self.__Mines.Show_Map[x][y] == self.__Mines.Unknown_Grid:
+            if self.__Mines.is_Unknown(x, y):
                 # Use function from object Mines
                 self.__Mines.Click(x, y)
             else:
@@ -226,14 +233,14 @@ class Mine_GUI(Mine_Map):
             setup mines
             flag the grid
         '''
-        # step 1, setup mines
         if self.__Mines.Steps == 0:
+            # step 1, setup mines
             print('Game Start')
             print('init your game at (%d,%d)' % (x, y))
             self.__Mines.Mines_Setup(x, y)
             self.__GUI_Refresh(x, y)
-        # flag and unflag
         else:
+            # flag and unflag
             self.__Mines.Flag(x, y)
             self.__GUI_Refresh(x, y)
 
@@ -354,6 +361,14 @@ class Mine_GUI(Mine_Map):
         self.__playing_data_labels['Flags'].configure(text=flag_str)
         self.__gui.update()
         self.__Message()
+
+    def __Callback_Guide(self):
+        title = 'User Guide'
+        f = open('./User_Guide.txt', encoding='UTF-8')
+        message = f.read()
+
+        messagebox.showinfo(title=title, message=message)
+        self.__Control_Panel_Setup()
 
     # Message box
     def __Message(self):
