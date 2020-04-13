@@ -83,29 +83,29 @@ Unit test.
 * CLI
 
 <div align=center>
-<img height='360' width='500' src='https://github.com/NengzhiWang/MineSweeper_SES/blob/master/README%20Image/CLI%20Play.jpg' alt='CLI'>
+<img height='360' width='500' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/CLI%20Play.jpg' alt='CLI'>
 </div>
 
 * GUI
 
 <div align=center>
-<img height='501' width='332' src='https://github.com/NengzhiWang/MineSweeper_SES/blob/master/README%20Image/GUI.jpg' alt='GUI'>
+<img height='501' width='332' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg' alt='GUI'>
 </div>
 
 * Auto Play
 
 <div align=center>
-<img height='446' width='320' src='https://github.com/NengzhiWang/MineSweeper_SES/blob/master/README%20Image/Auto%20Play.gif' alt='Auto play'>
+<img height='446' width='320' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Auto%20Play.gif' alt='Auto play'>
 </div>
 
 * Local Unit Test
 
 <div align=center>
-<img height='370' width='150' src='https://github.com/NengzhiWang/MineSweeper_SES/blob/master/README%20Image/Unit%20Test.jpg' alt='Local unit test'>
+<img height='370' width='150' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Unit%20Test.jpg' alt='Local unit test'>
 </div>
 
 * Travis CI
 
 <div align=center>
-<img height='750' width='525' src='https://github.com/NengzhiWang/MineSweeper_SES/blob/master/README%20Image/Travis%20Test.png' alt='Travis Test'>
+<img height='750' width='525' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Travis%20Test.png' alt='Travis Test'>
 </div>
