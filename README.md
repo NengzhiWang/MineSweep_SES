@@ -83,7 +83,7 @@ Unit test.
 * CLI
 
 <div align=center>
-<img height='360' width='500' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/CLI%20Play.jpg' alt='CLI'>
+<img height='500' width='360' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/CLI%20Play.jpg' alt='CLI'>
 </div>
 
 * GUI
