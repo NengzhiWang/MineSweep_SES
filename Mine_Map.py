@@ -52,12 +52,12 @@ class Mine_Map:
     def Mines_Setup(self, x, y):
         '''
         setup Mines with first click at [x, y]
-        have a save zone of # 8-nearby and [x, y] itself #
+        have a save zone of # 8-nearby and [x, y] itself
         '''
         print('first click at (%d,%d)' % (x, y))
         self.Status = self.alive
 
-        # init_grid = [x, y]
+        self.__init_grid = [x, y]
         Save_Zone = []
         for dx in [-1, 0, 1]:
             for dy in [-1, 0, 1]:
@@ -134,7 +134,8 @@ class Mine_Map:
                         inRange_x = (px >= 0 and px < self.SIZE_X)
                         inRange_y = (py >= 0 and py < self.SIZE_Y)
                         if inRange_x and inRange_y:
-                            if self.Show_Map[px][py] == self.Unknown_Grid:
+                            # if self.Show_Map[px][py] == self.Unknown_Grid:
+                            if self.is_Unknown(px, py):
                                 if self.__Data_Map[px][py] == 'M':
                                     self.Status = self.die
                                     print('died')
@@ -228,7 +229,6 @@ class Mine_Map:
                                 self.Click(px, py)
                                 operate_list.append([px, py])
 
-    # This function includes a lot of repeat operations
     def Auto_Play(self):
         '''
         auto_play
@@ -244,22 +244,13 @@ class Mine_Map:
                 self.Flag(x, y)
                 Operate_List.append([x, y, 2])
 
-            # random click no mine grid
-            # avoid cannot __Expanded situations
-            while self.Steps < 50:
-                x = random.randint(0, self.SIZE_X - 1)
-                y = random.randint(0, self.SIZE_Y - 1)
-                if [x, y] not in self.__Mine_List:
-                    self.Click(x, y)
-                    Operate_List.append([x, y, 1])
-
             Total_Grid = self.SIZE_X * self.SIZE_Y
             operate_list_cache_1 = []
             operate_list_cache_2 = []
             # Click not mine grid, until all no mine grid is known
             # record operations in List
-            while len(self.Known_Grid()) < Total_Grid - self.MINE_NUM:
-                Known_List = self.Known_Grid()
+            while len(self.__Get_Known_Grids()) < Total_Grid - self.MINE_NUM:
+                Known_List = self.__Get_Known_Grids()
                 for x in range(self.SIZE_X):
                     for y in range(self.SIZE_Y):
                         grid = [x, y]
@@ -386,7 +377,7 @@ class Mine_Map:
         '''
         return len(self.Get_Flag_List())
 
-    def Known_Grid(self):
+    def __Get_Known_Grids(self):
         '''
         return the grids of NOT_unknow
         '''
@@ -395,10 +386,7 @@ class Mine_Map:
             for j in range(self.SIZE_Y):
                 grid = [i, j]
                 D = self.Show_Map[i][j]
-                if D not in [
-                        self.Unknown_Grid, self.Flagged_Grid,
-                        self.UnMined_Flag, self.UnMined_Flag, self.Flagged_Mine
-                ]:
+                if D != self.Unknown_Grid:
                     Grid_List.append(grid)
         return Grid_List
 

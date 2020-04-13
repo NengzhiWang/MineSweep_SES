@@ -4,7 +4,7 @@ from Mine_GUI import Mine_GUI
 
 SIZE_X = 12
 SIZE_Y = 12
-MINE_NUM = 15
+MINE_NUM = (SIZE_X * SIZE_Y) // 8
 
 if __name__ == '__main__':
     windows = tk.Tk()
