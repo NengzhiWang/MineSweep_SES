@@ -1,4 +1,5 @@
 import copy
+import os
 import random
 import sys
 import unittest
@@ -8,6 +9,8 @@ from Mine_Map import Mine_Map
 # Adjust recursive tree limits
 # default is 1000?
 sys.setrecursionlimit(10000)
+# block print
+sys.stdout = open(os.devnull, 'w')
 '''
     unittest for Class Mine_Map
     test:
@@ -19,8 +22,8 @@ sys.setrecursionlimit(10000)
 
 
 class Mine_Test(unittest.TestCase):
-    SIZE_X = 128
-    SIZE_Y = 128
+    SIZE_X = 64
+    SIZE_Y = 64
     MINE_NUM_1 = (SIZE_X * SIZE_Y) // 8
 
     # init map and setup mines
@@ -75,7 +78,7 @@ class Mine_Test(unittest.TestCase):
         self.assertEqual(Old_status, self.Mines_1.die)
         self.assertEqual(New_status, self.Mines_1.alive)
 
-    def test_Auto_Play_1(self):
+    def test_Auto_Play(self):
         gird_list = []
 
         while len(gird_list) < self.MINE_NUM_1:
@@ -105,4 +108,4 @@ class Mine_Test(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
