@@ -22,8 +22,8 @@ sys.stdout = open(os.devnull, 'w')
 
 
 class Mine_Test(unittest.TestCase):
-    SIZE_X = 64
-    SIZE_Y = 64
+    SIZE_X = 128
+    SIZE_Y = 128
     MINE_NUM_1 = (SIZE_X * SIZE_Y) // 8
 
     # init map and setup mines
