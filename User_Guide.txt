@@ -2,30 +2,31 @@ User Guide for MineSweep
 
 The numbers in the grid represent the total number of mines in the eight grids around a grid.
 
-Left Click: 
+1. Left Click: 
 
-When clicking on an unknown cell, if the cell is a mine, you will lose the game. If this grid is not a mine, the number of mines around this grid and the grid connected to this grid that is not a mine will be displayed.
-When clicking on a grid showing the number, if the number of mines around it and the number of flags are the same, an unknown grid around it will be displayed. However, if the flag you marked is wrong, you will lose the game.
+If the player clicks a unknown grid, the number is now visible to the player.
+If the player clicks a grid without mine, ripple effect takes place uncovering all the blanks in the neighborhood until either the grid boundary is reached or a number is reached along its path.
+If the player clicks a grid with mine, the game is over.
+If the player clicks a not unknown grid, and the number of flags nearby equal to the number of mines nearby, all unknown grids nearby will be shown automatically. If there is a wrong flag, the game is over.
 
-Right Click:
+2. Right Click:
 
-Mark a grid as a mine, or unmark a grid. 
+Player can mark a grid or unmark a grid.
+When the player marks all the mines, the game is won.
 
-When the grid marked by the flag is the same as all grids with mines, you will win.
-
-Replay:
+3. Replay:
 
 Play in the same map again.
 
-New Game:
+4. New Game:
 
 Have a new game in a new map.
 
-Auto Play:
+5. Auto Play:
 
 The game will be completed automatically.
 
-Cheat:
+6. Cheat:
 
 The content in the grid where the mouse pointer is located will be displayed in the interface.
 
