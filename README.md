@@ -36,14 +36,18 @@ Unit test for some algorithms in ` Mine_Map.py `.
 
 * GUI
 
-![GUI](https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg)
-
-<div align=center><img width='332' height='501' scr='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg' alt='GUI' /></div>
+<div align=center>
+<img height='501' width='332' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg' alt='GUI'>
+</div>
 
 * Auto play
 
-<img src="https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Auto%20Play.gif" alt="Auto Play" style="zoom:50%;" />
+<div align=center>
+<img height='446' width='320' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Auto%20Play.gif' alt='GUI'>
+</div>
 
 * Travis CI
 
-![Travis Test](https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Travis%20Test.png)
+<div align=center>
+<img height='750' width='525' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Travis%20Test.png' alt='Travis Test'>
+</div>
