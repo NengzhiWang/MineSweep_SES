@@ -101,7 +101,7 @@ Unit test.
 * Local Unit Test
 
 <div align=center>
-<img height='370' width='150' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Unit%20Test.jpg' alt='Local unit test'>
+<img height='150' width='370' src='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/Unit%20Test.jpg' alt='Local unit test'>
 </div>
 
 * Travis CI
