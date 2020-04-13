@@ -38,7 +38,7 @@ Unit test for some algorithms in ` Mine_Map.py `.
 
 ![GUI](https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg)
 
-<div align=center><img width='332' height='501' scr='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg'></div>
+<div align=center><img width='332' height='501' scr='https://github.com/NengzhiWang/MineSweep_SES/blob/master/README%20Image/GUI.jpg' alt='GUI' /></div>
 
 * Auto play
 
