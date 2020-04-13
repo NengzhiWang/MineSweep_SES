@@ -1,7 +1,10 @@
 from Mine_Map import Mine_Map
-
+SIZE_X = 5
+SIZE_Y = 5
+MINE_NUM = 5
 if __name__ == "__main__":
-    Mine = Mine_Map(5, 5, 5)
+
+    Mine = Mine_Map(SIZE_X, SIZE_Y, MINE_NUM)
 
     Continue_Game = True
     while Mine.Status != Mine.win and Mine.Status != Mine.die:
@@ -12,14 +15,20 @@ if __name__ == "__main__":
             print('init your game')
             x = int(input('x='))
             y = int(input('y='))
-            Mine.Mines_Setup(x, y)
+            if 0 <= x < SIZE_X and 0 <= y < SIZE_Y:
+                Mine.Mines_Setup(x, y)
+                Mine.Disp_UI()
+            else:
+                print('out of range')
         else:
             x = int(input('x='))
             y = int(input('y='))
-            do = input('1 is click, 2 is flag \t')
-            if do == '1':
-                Mine.Click(x, y)
-            elif do == '2':
-                Mine.Flag(x, y)
-
-        Mine.Disp_UI()
+            if 0 <= x < SIZE_X and 0 <= y < SIZE_Y:
+                do = input('1 is click, 2 is flag \t')
+                if do == '1':
+                    Mine.Click(x, y)
+                elif do == '2':
+                    Mine.Flag(x, y)
+                Mine.Disp_UI()
+            else:
+                print('out of range')
