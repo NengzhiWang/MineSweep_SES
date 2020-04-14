@@ -22,11 +22,11 @@ We created a class called ` Mine_Map` for minesweeper in the file  './Mine_Map.p
 
 2. If the player clicks a unknown grid, the number is now visible to the player.
 
-3. If the player clicks a grid without mine, ripple effect takes place uncovering all the blanks in the neighborhood until either the grid boundary is reached or a number is reached along its path. The ripple effect is implemented by recursion.
+3. If the player clicks a grid without mine, ripple effect takes place uncovering all the blanks in the neighborhood until either the grid boundary is reached or a number is reached along its path. The ripple effect is implemented by recursion. . On larger maps, the following errors may occur ` RecursionError: maximum recursion depth exceeded in comparison ` due to the limitation of ` sys.setrecursionlimit() `
 
 4. If the player clicks a grid with mine, the game is over.
 
-5. If the player clicks a not unknown grid, and the number of flags nearby equal to the number of mines nearby, all unknown grids nearby will be shown automatically. If there is a wrong flag, the game is over. On larger maps, the following errors may occur ` RecursionError: maximum recursion depth exceeded in comparison ` due to the limitation of ` sys.setrecursionlimit() `.
+5. If the player clicks a not unknown grid, and the number of flags nearby equal to the number of mines nearby, all unknown grids nearby will be shown automatically. If there is a wrong flag, the game is over.
 
 6. Player can mark a grid or unmark a grid.
 
