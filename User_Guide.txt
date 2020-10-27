@@ -29,4 +29,3 @@ The game will be completed automatically.
 6. Cheat:
 
 The content in the grid where the mouse pointer is located will be displayed in the interface.
-

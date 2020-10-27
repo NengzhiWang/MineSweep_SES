@@ -1,8 +1,18 @@
 import copy
+import os
+import sys
 import tkinter as tk
 from tkinter import messagebox
 
 from Mine_Map import Mine_Map
+
+
+def Disable_Print():
+    sys.stdout = open(os.devnull, 'w')
+
+
+def Enable_Print():
+    sys.stdout = sys.__stdout__
 
 
 class Mine_GUI(Mine_Map):
@@ -15,6 +25,7 @@ class Mine_GUI(Mine_Map):
             load images
             setup panels
         '''
+        Disable_Print()
         self.__gui = gui
         # GUI title
         self.__gui.title('MineSweep SES')
@@ -209,6 +220,7 @@ class Mine_GUI(Mine_Map):
         '''
         # step 1, setup mines
         if self.__Mines.Steps == 0:
+            Enable_Print()
             print('Game Start')
             print('init your game at (%d,%d)' % (x, y))
             # init an object from class Mine_Map
@@ -258,9 +270,11 @@ class Mine_GUI(Mine_Map):
         if self.__GUI_Show_Data:
             self.__playing_data_labels['Data'].configure(
                 text=self.__Mines.Get_Data_Map()[x][y])
+            print('Enter grid (%d, %d)\t%s inside' %
+                  (x, y, self.__Mines.Get_Data_Map()[x][y]))
         else:
             self.__playing_data_labels['Data'].configure(text='')
-
+            print('Enter grid (%d, %d)' % (x, y))
         self.__gui.update_idletasks()
 
     # auto play
@@ -274,6 +288,8 @@ class Mine_GUI(Mine_Map):
         new_Mine = copy.deepcopy(self.__Mines)
 
         # finish and record how to play in the new Mine_Map
+        Disable_Print()
+
         Operate_List = new_Mine.Auto_Play()
 
         # using the record oprations, finish this game
@@ -289,6 +305,7 @@ class Mine_GUI(Mine_Map):
             elif f == 2:
                 self.__Mines.Flag(x, y)
             self.__GUI_Refresh(x, y)
+        Enable_Print()
 
     def __Callback_Cheat(self):
         '''
@@ -378,9 +395,17 @@ class Mine_GUI(Mine_Map):
         '''
         S = self.__Mines.Status
         if S == self.__Mines.die:
-            messagebox.showerror(title='DIED', message='You are died!!!')
+            game_duratiom = self.__Mines.game_duration
+            message_text = 'You are died!!!\n' + 'time cost\t' + str(
+                game_duratiom) + 'sec'
+            messagebox.showerror(title='DIED', message=message_text)
+            Disable_Print()
 
         elif S == self.__Mines.win:
-            messagebox.showinfo(title='WINNING',
-                                message='You are the winner!!!')
+            game_duratiom = self.__Mines.game_duration
+            message_text = 'You are the winner!!!\n' + 'time cost\t' + str(
+                game_duratiom) + 'sec'
+
+            messagebox.showinfo(title='WINNING', message=message_text)
             self.__Callback_New_Game()
+            Disable_Print()

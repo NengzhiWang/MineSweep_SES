@@ -1,4 +1,16 @@
+import math
+import os
 import random
+import sys
+import time
+
+
+def Disable_Print():
+    sys.stdout = open(os.devnull, 'w')
+
+
+def Enable_Print():
+    sys.stdout = sys.__stdout__
 
 
 class Mine_Map:
@@ -48,6 +60,8 @@ class Mine_Map:
         self.__Mine_List = []
         # self.__Flag_List = []
         self.Steps = 0
+        self.__start_time = time.time()
+        self.game_duration = 0.0
 
     def Mines_Setup(self, x, y):
         '''
@@ -58,10 +72,10 @@ class Mine_Map:
         self.Status = self.alive
 
         self.__init_grid = [x, y]
-        Save_Zone = []
+        Safe_Zone = []
         for dx in [-1, 0, 1]:
             for dy in [-1, 0, 1]:
-                Save_Zone.append([x + dx, y + dy])
+                Safe_Zone.append([x + dx, y + dy])
         # random set mine
         # grid (x,y) is not available for a mine
         # grid point have most 1 mine
@@ -71,7 +85,7 @@ class Mine_Map:
             grid = [random_x, random_y]
             # the grid first clicked must not a mine
             # one mine in one grid
-            if grid not in Save_Zone and grid not in self.__Mine_List:
+            if grid not in Safe_Zone and grid not in self.__Mine_List:
                 self.__Mine_List.append(grid)
                 self.__Mine_Map[random_x][random_y] = 1
         self.__Map_Setup()
@@ -315,6 +329,8 @@ class Mine_Map:
                     elif isFlag == 1 and isMine == 1:
                         # have flag, have mine
                         self.Show_Map[x_i][y_i] = self.Flagged_Mine
+            self.game_duration = round(time.time() - self.__start_time, 1)
+
         elif self.Status == self.win:
             for x_i in range(self.SIZE_X):
                 for y_i in range(self.SIZE_Y):
@@ -325,6 +341,7 @@ class Mine_Map:
                     else:
                         # no flag and mine
                         self.Show_Map[x_i][y_i] = self.__Data_Map[x_i][y_i]
+            self.game_duration = round(time.time() - self.__start_time, 1)
 
     def Disp_All(self):
         '''

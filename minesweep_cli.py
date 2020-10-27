@@ -1,4 +1,5 @@
 from Mine_Map import Mine_Map
+
 SIZE_X = 5
 SIZE_Y = 5
 MINE_NUM = 5
